@@ -1,6 +1,5 @@
 // src/blogData.ts
 
-// You can define the interface here or import it if it's defined elsewhere
 interface BlogPost {
     id: string;
     title: string;
@@ -9,80 +8,36 @@ interface BlogPost {
     tags: string[];
 }
 
-// Export the array directly
+// Use backticks (`) for the content string
+// Sorted by id 
 export const blogPosts: BlogPost[] = [
   {
     id: '1',
     title: 'My First Webpage! WOW!',
-    date: '1993-02-15',
-    // Use backticks (`) for the content string
+    date: '2025-03-28',
     content: `Welcome to my corner of the World Wide Web!
 
-This is pretty basic right now, but I'm learning HTML. It's amazing what you can do with just text files and these '<tag>' things.
-
-Look, I can make lists:
-*   Thing one
-*   Thing two
-*   Another thing!
-
-And tables!
-
-| Header 1 | Header 2 |
-|----------|----------|
-| Data A   | Data B   |
-| Data C   | Data D   |
+This is pretty basic right now, but I'm learning. It's amazing what you can do with just text files and these '<tag>' things!
 
 More to come soon! Gotta find some cool background images and maybe a MIDI file...
 
 (Imagine a dancing banana here!)`,
-    tags: ['first post', 'html', 'web development', 'geocities']
+    tags: ['first post', 'web dev']
   },
   {
     id: '2',
-    title: 'The Wonders of the Web - Search Engines!',
-    date: '1993-03-01',
-    content: `I can't believe how much stuff is out there! People are putting up pages about everything.
+    title: 'Client-Side Image Steganography with Rust & WebAssembly',
+    date: '2024-03-29',
+    content: `I had a sudden, random urge lately to start learning Rust and WASM. I created several apps (with AI coding doing the heavy lifting) to play around.
 
-How do you find anything? Search engines! I've been using Yahoo! mostly. It's like a giant directory.
+Now I can copy huge ebooks from Project Gutenberg and easily encode the entire content perfectly into image files, all using WASM in milliseconds. How practical!
 
-It's fun to just click around and see what you discover. Found a site with cool ASCII art yesterday.
+It uses a method called "Least Significant Bit" (LSB) steganography. Each tiny pixel in your image has color values (Red, Green, Blue). This tool slightly tweaks the very last bit of those color values to store the bits of your message. These changes are usually so small that they're invisible to the naked eye.
 
-Here's a little table of cool sites (well, the ones I remember):
+I learned quickly that the hidden message is fragile! You must save the image with the hidden message as a PNG file. Saving it as a JPEG or editing the image in almost any way will likely erase the hidden text.
 
-| Name         | Age | Favorite Thing |
-|--------------|-----|----------------|
-| Me           | ??  | This Blog! :)  |
-| Friend       | ??  | Hamster Dance? |
-| Another Site | ??? | ???            |
-
-Okay, the table needs work. Still learning!
-
-What are your favorite search engines or cool sites? Leave a comment (if I figure out how to add comments...).`,
-    tags: ['web', 'internet', 'search', 'yahoo', 'cool sites', 'discovery']
+Live Demo Here (Link: https://technotastic.github.io/pixel-embed-wasm/ )
+`,
+    tags: ['rust', 'sternography', 'wasm']
   },
-  {
-    id: '3',
-    title: 'Learning JavaScript - Making things MOVE!',
-    date: '1995-12-04',
-    content: `Okay, this new thing called JavaScript just came out with Netscape Navigator 2.0. It's supposed to let you make web pages interactive!
-
-It seems... complicated. But also really cool. You can make things happen when people click buttons, or even change images.
-
-Here's my first attempt at a script:
-
-// My first script!
-function showAlert() {
-  alert("You clicked the button! Wow!");
-}
-
-// Need to figure out how to add a button in HTML to call this...
-// <button onclick="showAlert()">Click Me!</button> ??
-
-Maybe I can make that dancing banana *actually* dance...
-
-Or maybe just change the background color when you move the mouse? So many possibilities!
-
-... gotta test that. This could crash the browser! Wish me luck.`,
-    tags: ['javascript', 'netscape', 'programming', 'newbie', 'interactive']
-  }
 ];

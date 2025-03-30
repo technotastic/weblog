@@ -53,7 +53,7 @@ const VisitorCounter: React.FC = () => {
 };
 
 // --- Main App Component ---
-const RetroBlogApp: React.FC = () => {
+const BlogApp: React.FC = () => {
   const [posts, setPosts] = useState<BlogPost[]>(initialBlogPostsData);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -90,7 +90,7 @@ const RetroBlogApp: React.FC = () => {
   const sortedPosts = useMemo<BlogPost[]>(
     () =>
       [...posts].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        (a, b) => parseInt(b.id, 10) - parseInt(a.id, 10)
       ),
     [posts]
   );
@@ -331,7 +331,7 @@ const RetroBlogApp: React.FC = () => {
               scrollAmount="3"
               className="header-marquee"
             >
-              <tt>===*** MY COOL RETRO BLOG ***===</tt>
+              <tt>***===*** CHECK OUT MY SUPER COOL WEB LOG! ***===***</tt>
             </marquee>
           )}
           <div className="header-left">
@@ -340,9 +340,9 @@ const RetroBlogApp: React.FC = () => {
               className="header-title"
               title="Back to Home / Reset Filters"
             >
-              My Retro Blog
+              technotastic's web log
             </h1>
-            <p className="header-subtitle">Est. 1993 - Welcome!</p>
+            <p className="header-subtitle">Est. 2025 - Welcome!</p>
           </div>
           <div className="header-right">
             <form onSubmit={handleFormSubmit} className="search-form">
@@ -404,7 +404,7 @@ const RetroBlogApp: React.FC = () => {
           <tr>
             <td className="footer-content">
               <p className="footer-text">
-                © 1993-1995 My Retro Blog... <br />
+                © 2025 technotastic's web log... <br />
               </p>
             </td>
           </tr>
@@ -414,4 +414,4 @@ const RetroBlogApp: React.FC = () => {
   );
 };
 
-export default RetroBlogApp;
+export default BlogApp;
