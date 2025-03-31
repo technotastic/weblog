@@ -40,4 +40,15 @@ Live Demo Here (Link: https://technotastic.github.io/pixel-embed-wasm/ )
 `,
     tags: ['rust', 'sternography', 'wasm']
   },
+  {
+    id: '3',
+    title: 'To blog, or not to blog',
+    date: '2024-03-31',
+    content: `I made this blog as an experiment to see how close I could match the old 90's web aesthetic, but now I'm thinking I might actually start using it.. 
+
+I'll update it if I create any new projects or learn anything cool.  I worked non-stop through lunch with Kotlin/Jetpack Compose at work today so I don't have much energy to post anything interesting yet though.  I'm really happy with the result at least. 
+
+Things change so much so this will age like spoiled milk, but I've been playing around with the new Gemini Pro 2.5 Experimental model on Google's AI Studio the last few days and really digging it. `,
+    tags: ['personal']
+  },
 ];
