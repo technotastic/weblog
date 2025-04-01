@@ -58,6 +58,6 @@ Things change so much so this will age like spoiled milk, but I've been playing 
     date: '2024-04-01',
     content: `Created an image to ASCII converter.  I think I will use it to generate some somewhat-unique visual content for the blog.  I call it Asciifyer and it's living here for now: https://technotastic.github.io/ascii-art-generator/`,
     tags: ['ascii'],
-    imageUrl: '/images/post4.png'
+    imageUrl: 'images/post4.png'
   },
 ];
