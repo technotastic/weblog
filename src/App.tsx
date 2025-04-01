@@ -1,23 +1,29 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { blogPosts as initialBlogPostsData } from './blogData';
+import { blogPosts as initialBlogPostsData } from './blogData'; // Assuming blogData.ts exists
 import './App.css'; // Import the CSS file
 
 // --- Hooks ---
 function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = useState(() => {
+      if (typeof window === 'undefined') return false;
+      return window.matchMedia(query).matches;
+  });
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const media = window.matchMedia(query);
     const listener = () => setMatches(media.matches);
-    listener();
-    // Use addEventListener/removeEventListener if available, otherwise fallback
+    listener(); // Sync state on client mount
     if (media.addEventListener) {
       media.addEventListener('change', listener);
       return () => media.removeEventListener('change', listener);
     } else {
-      // Deprecated fallback for older browsers
-      media.addListener(listener);
-      return () => media.removeListener(listener);
+      try {
+        media.addListener(listener); // Deprecated fallback
+        return () => media.removeListener(listener); // Deprecated fallback
+      } catch (e) {
+        console.error("media.addListener/removeListener is not supported.", e);
+      }
     }
   }, [query]);
   return matches;
@@ -30,14 +36,13 @@ interface BlogPost {
   date: string;
   content: string;
   tags: string[];
-  imageUrl?: string; 
+  imageUrl?: string;
 }
 
 // --- Components ---
 const VisitorCounter: React.FC = () => {
   const [count, setCount] = useState<string | null>(null);
   useEffect(() => {
-    // Simulate fetching or calculating a count
     const fakeCount = Math.floor(Math.random() * 1000) + 123;
     setCount(fakeCount.toString().padStart(6, '0'));
   }, []);
@@ -55,7 +60,9 @@ const VisitorCounter: React.FC = () => {
 
 // --- Main App Component ---
 const BlogApp: React.FC = () => {
-  const [posts, setPosts] = useState<BlogPost[]>(initialBlogPostsData);
+  const posts: BlogPost[] = initialBlogPostsData;
+  // Removed: const [posts, setPosts] = useState<BlogPost[]>(initialBlogPostsData);
+
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -68,24 +75,24 @@ const BlogApp: React.FC = () => {
       const hash = window.location.hash;
       if (hash.startsWith('#/post/')) {
         const postId = hash.substring('#/post/'.length);
+        // Use the constant 'posts' array
         if (posts.some((p) => p.id === postId)) {
           setViewingPostId(postId);
           window.scrollTo(0, 0);
         } else {
           console.warn(`Post with ID "${postId}" not found.`);
-          window.location.hash = ''; // Reset hash if post not found
+          window.location.hash = '';
         }
       } else {
-        // Only reset viewingPostId if it was previously set
         if (viewingPostId !== null) {
           setViewingPostId(null);
         }
       }
     };
-    handleHashChange(); // Initial check
+    handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [posts, viewingPostId]); // viewingPostId added to deps
+  }, [posts, viewingPostId]);
 
   // Memos and Callbacks
   const sortedPosts = useMemo<BlogPost[]>(
@@ -116,19 +123,19 @@ const BlogApp: React.FC = () => {
 
   const allTags = useMemo<string[]>(
     () => Array.from(new Set(posts.flatMap((post) => post.tags))).sort(),
-    [posts]
+    [posts] 
   );
 
   const handleTagClick = useCallback((tag: string) => {
     setSelectedTag((prev) => (prev === tag ? null : tag));
     setSearchQuery('');
-    window.location.hash = ''; // Clear hash when filtering by tag
+    window.location.hash = '';
   }, []);
 
   const handleSearchChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(event.target.value);
-      window.location.hash = ''; // Clear hash when searching
+      window.location.hash = '';
     },
     []
   );
@@ -142,18 +149,17 @@ const BlogApp: React.FC = () => {
   ) => {
     e.preventDefault();
     handleTagClick(tag);
-    if (isMobile) setShowFilters(false); // Hide filters on mobile after selection
+    if (isMobile) setShowFilters(false);
   };
 
   const handleShowAllClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setSelectedTag(null);
     setSearchQuery('');
-    if (isMobile) setShowFilters(false); // Hide filters on mobile
-    window.location.hash = ''; // Clear hash when showing all
+    if (isMobile) setShowFilters(false);
+    window.location.hash = '';
   };
 
-  // Navigate to tag filter *from* a post or post list item
   const handleTagNavigation = (
     e: React.MouseEvent<HTMLAnchorElement>,
     tag: string
@@ -161,15 +167,15 @@ const BlogApp: React.FC = () => {
     e.preventDefault();
     setSelectedTag(tag);
     setSearchQuery('');
-    window.location.hash = ''; // Ensure we are back on the list view
-    if (isMobile) setShowFilters(false); // Hide filters if mobile
+    window.location.hash = '';
+    if (isMobile) setShowFilters(false);
   };
 
   const handleTitleClick = useCallback(() => {
     setSelectedTag(null);
     setSearchQuery('');
-    window.location.hash = ''; // Ensure back on list view
-    setShowFilters(false); // Reset filter visibility
+    window.location.hash = '';
+    setShowFilters(false);
     window.scrollTo(0, 0);
   }, []);
 
@@ -210,7 +216,6 @@ const BlogApp: React.FC = () => {
     </>
   );
 
-  // Reusable Render Functions
   const renderPostCards = () => (
     <>
       {filteredPosts.length === 0 && (searchQuery || selectedTag) && (
@@ -218,7 +223,7 @@ const BlogApp: React.FC = () => {
           No posts found matching your criteria...
         </p>
       )}
-      {posts.length === 0 && (
+      {posts.length === 0 && !searchQuery && !selectedTag && ( // Check original posts length
         <p className="no-posts-message">No posts available yet!</p>
       )}
       {filteredPosts.map((post) => (
@@ -233,22 +238,19 @@ const BlogApp: React.FC = () => {
             </a>
           </h2>
           <p className="post-card-date">Posted: {post.date}</p>
-
           {post.imageUrl && (
             <div className="post-card-image-container">
-              <a href={`#/post/${post.id}`} title={`View post: ${post.title}`}> {/* Optional: Make image clickable */}
+              <a href={`#/post/${post.id}`} title={`View post: ${post.title}`}>
                 <img
                   src={post.imageUrl}
                   alt={`Thumbnail for post: ${post.title}`}
                   className="post-card-image"
-                  loading="lazy" // Good for lists
+                  loading="lazy"
                 />
               </a>
             </div>
           )}
-
           <div className="plain-text-content">
-            {/* Keep the substring logic for the text preview */}
             {post.content.substring(0, 250)}
             {post.content.length > 250 ? '...' : ''}
           </div>
@@ -270,7 +272,7 @@ const BlogApp: React.FC = () => {
           <div className="read-more-section">
             <a
               href={`#/post/${post.id}`}
-              className="tag-link tag-link--post" // Reuse tag link style
+              className="tag-link tag-link--post"
             >
               Read More »
             </a>
@@ -292,7 +294,7 @@ const BlogApp: React.FC = () => {
               e.preventDefault();
               window.location.hash = '';
             }}
-            className="tag-link tag-link--post" // Reuse tag link style
+            className="tag-link tag-link--post"
           >
             « Back to Blog List
           </a>
@@ -308,27 +310,23 @@ const BlogApp: React.FC = () => {
               e.preventDefault();
               window.location.hash = '';
             }}
-            className="tag-link tag-link--post" // Reuse tag link style
+            className="tag-link tag-link--post"
           >
             « Back to Blog List
           </a>
         </div>
         <h1 className="single-post-title">{post.title}</h1>
         <p className="single-post-date">Posted: {post.date}</p>
-
-        {/* --- START: Image Rendering --- */}
         {post.imageUrl && (
           <div className="single-post-image-container">
             <img
               src={post.imageUrl}
-              alt={`Image for post: ${post.title}`} 
+              alt={`Image for post: ${post.title}`}
               className="single-post-image"
-              loading="lazy" 
+              loading="lazy"
             />
           </div>
         )}
-        {/* --- END: Image Rendering --- */}
-
         <div className="plain-text-content">{post.content}</div>
         <div className="tags-section">
           <b className="tags-section-title">Tags:</b>{' '}
@@ -352,17 +350,19 @@ const BlogApp: React.FC = () => {
   // Main Render
   return (
     <div className="app-container">
-      {/* Header: Only show when not viewing a single post */}
       {!viewingPostId && (
         <div className="app-header">
           {!isMobile && (
+            // @ts-ignore
             <marquee
               behavior="scroll"
               direction="left"
               scrollAmount="3"
               className="header-marquee"
             >
+              {/* @ts-ignore */}
               <tt>***===*** CHECK OUT MY SUPER COOL WEB LOG! ***===***</tt>
+              {/* @ts-ignore */}
             </marquee>
           )}
           <div className="header-left">
@@ -401,23 +401,19 @@ const BlogApp: React.FC = () => {
         </div>
       )}
 
-      {/* Main Content Area: Changes layout based on view */}
       <div
         className={`main-content ${
           !viewingPostId ? 'main-content--list-view' : ''
         }`}
       >
         {viewingPostId ? (
-          // Single Post View
           renderSinglePost(viewingPostId)
         ) : isMobile ? (
-          // Mobile List View
           <div>
             {showFilters && <div className="sidebar">{renderSidebarContent()}</div>}
             <div className="post-list-container">{renderPostCards()}</div>
           </div>
         ) : (
-          // Desktop List View (Table Layout)
           <table className="desktop-layout-table">
             <tbody>
               <tr>
@@ -429,7 +425,6 @@ const BlogApp: React.FC = () => {
         )}
       </div>
 
-      {/* Footer */}
       <table className="app-footer" cellSpacing="0">
         <tbody>
           <tr>
