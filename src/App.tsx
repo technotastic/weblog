@@ -30,6 +30,7 @@ interface BlogPost {
   date: string;
   content: string;
   tags: string[];
+  imageUrl?: string; 
 }
 
 // --- Components ---
@@ -209,6 +210,7 @@ const BlogApp: React.FC = () => {
     </>
   );
 
+  // Reusable Render Functions
   const renderPostCards = () => (
     <>
       {filteredPosts.length === 0 && (searchQuery || selectedTag) && (
@@ -231,7 +233,22 @@ const BlogApp: React.FC = () => {
             </a>
           </h2>
           <p className="post-card-date">Posted: {post.date}</p>
+
+          {post.imageUrl && (
+            <div className="post-card-image-container">
+              <a href={`#/post/${post.id}`} title={`View post: ${post.title}`}> {/* Optional: Make image clickable */}
+                <img
+                  src={post.imageUrl}
+                  alt={`Thumbnail for post: ${post.title}`}
+                  className="post-card-image"
+                  loading="lazy" // Good for lists
+                />
+              </a>
+            </div>
+          )}
+
           <div className="plain-text-content">
+            {/* Keep the substring logic for the text preview */}
             {post.content.substring(0, 250)}
             {post.content.length > 250 ? '...' : ''}
           </div>
@@ -298,6 +315,20 @@ const BlogApp: React.FC = () => {
         </div>
         <h1 className="single-post-title">{post.title}</h1>
         <p className="single-post-date">Posted: {post.date}</p>
+
+        {/* --- START: Image Rendering --- */}
+        {post.imageUrl && (
+          <div className="single-post-image-container">
+            <img
+              src={post.imageUrl}
+              alt={`Image for post: ${post.title}`} 
+              className="single-post-image"
+              loading="lazy" 
+            />
+          </div>
+        )}
+        {/* --- END: Image Rendering --- */}
+
         <div className="plain-text-content">{post.content}</div>
         <div className="tags-section">
           <b className="tags-section-title">Tags:</b>{' '}

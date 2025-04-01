@@ -204,6 +204,7 @@
   color: #555555;
 }
 
+/* NOTE: plain-text-content style remains the same */
 .plain-text-content {
   white-space: pre-wrap;
   line-height: 1.4;
@@ -318,10 +319,47 @@
 
 .single-post-date {
   font-size: 0.9em;
-  margin: 0 0 20px 0;
+  margin: 0 0 20px 0; /* Increased bottom margin slightly to give space before image */
   color: #555555;
 }
 
+.single-post-image-container {
+  margin-top: 1rem;    /* Space above image (already space from date) */
+  margin-bottom: 1.5rem; /* Space below image before content */
+  text-align: center;    /* Center the container/image */
+}
+
+.single-post-image {
+  max-width: 100%;     /* Essential: prevent overflow */
+  height: auto;        /* Essential: maintain aspect ratio */
+  display: block;      /* Helps with spacing/centering */
+  margin-left: auto;   /* Center image */
+  margin-right: auto;  /* Center image */
+  border: 2px outset #e0e0e0; /* Retro border like buttons/app */
+  background-color: #ffffff; /* Ensure no transparency issues */
+}
+
+
+.post-card-image-container {
+  margin-bottom: 10px; /* Space between image and content preview */
+  text-align: center;  /* Center the image container/image */
+}
+
+.post-card-image {
+  max-width: 90%;    /* Limit width within the card padding */
+  max-height: 200px; /* Optional: Limit height for consistency */
+  height: auto;      /* Maintain aspect ratio */
+  display: block;    /* For centering and spacing */
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #b0b0b0; /* Simple border, like the card */
+  box-shadow: 1px 1px 0px 0px #a0a0a0; /* Subtle shadow like card */
+}
+
+  /* Ensure content below image has some space */
+  .post-card .plain-text-content {
+    margin-top: 10px; /* Add margin if image was present, or adjust existing */
+  }
 /* Footer Styles */
 .app-footer {
   width: 100%;
@@ -390,6 +428,12 @@
   .single-post-container {
     min-height: auto;
   }
+
+  /* Optional: Slightly reduce image margins on mobile if needed */
+  /* .single-post-image-container {
+    margin-top: 0.8rem;
+    margin-bottom: 1rem;
+  } */
 }
 
 /* Desktop Specific Overrides (applied when NOT mobile) */
