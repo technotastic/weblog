@@ -60,4 +60,12 @@ Things change so much so this will age like spoiled milk, but I've been playing 
     tags: ['ascii'],
     imageUrl: 'images/post4.png'
   },
+  {
+    id: '5',
+    title: 'KiraKira Kotoba',
+    date: '2024-04-02',
+    content: `Made site today for drilling Japanese onomatopoeia.  These have always been very difficult for me so this was a way to force a little bit of practice while testing.  https://technotastic.github.io/kirakirakotoba/`,
+    tags: ['web dev'],
+    imageUrl: 'images/post5.png'
+  },
 ];
