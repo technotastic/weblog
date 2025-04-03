@@ -68,4 +68,12 @@ Things change so much so this will age like spoiled milk, but I've been playing 
     tags: ['web dev'],
     imageUrl: 'images/post5.png'
   },
+  {
+    id: '6',
+    title: 'Working for the man every night and day',
+    date: '2024-04-03',
+    content: `Working too hard lately at my day job so there is not much time for personal projects.  I need to find a better balance.`,
+    tags: ['personal'],
+    imageUrl: 'images/post6.png'
+  },
 ];
